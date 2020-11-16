@@ -132,6 +132,7 @@ DrawViewPart::DrawViewPart(void) :
     static const char *group = "Projection";
     static const char *sgroup = "HLR Parameters";
     nowUnsetting = false;
+    m_handleFaces = false;
 
     CosmeticExtension::initExtension(this);
 
@@ -1290,7 +1291,7 @@ void DrawViewPart::refreshCEGeoms(void)
     std::vector<TechDraw::BaseGeom *> gEdges = getEdgeGeometry();
     std::vector<TechDraw::BaseGeom *> oldGEdges;
     for (auto& ge :gEdges) {
-        if (ge->getCosmeticTag().empty()) {       //keep only non-ce edges
+        if (ge->source() != SourceType::COSEDGE)  {
             oldGEdges.push_back(ge);
         }
     }
@@ -1328,8 +1329,7 @@ void DrawViewPart::refreshCLGeoms(void)
     std::vector<TechDraw::BaseGeom *> gEdges = getEdgeGeometry();
     std::vector<TechDraw::BaseGeom *> newGEdges;
     for (auto& ge :gEdges) {
-        //TODO: this will keep CE & CL
-        if (ge->getCosmeticTag().empty()) {       //keep only non-cl edges
+        if (ge->source() != SourceType::CENTERLINE)  {
             newGEdges.push_back(ge);
         }
     }
